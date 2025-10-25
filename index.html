@@ -1,0 +1,1509 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Quantum Security & Vault System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Arial', monospace;
+            background: radial-gradient(ellipse at center, #0f0f23 0%, #000000 100%);
+            min-height: 100vh;
+            color: #00ffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated starfield background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .door-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-panel {
+            flex: 2;
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.1), rgba(128, 0, 255, 0.1));
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+        }
+
+        .quantum-door {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            background: linear-gradient(145deg, #1e3c72, #2a5298);
+            border-radius: 15px;
+            border: 3px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            transition: all 0.8s ease;
+            overflow: hidden;
+        }
+
+        .quantum-door.unlocked {
+            transform: perspective(300px) rotateY(-25deg);
+            box-shadow: -20px 0 40px rgba(0, 255, 255, 0.7);
+        }
+
+        .quantum-lock {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            transition: all 0.5s ease;
+            border: 3px solid;
+        }
+
+        .lock-secured {
+            background: linear-gradient(45deg, #ff0040, #ff4081);
+            border-color: #ff0040;
+            color: white;
+            animation: pulse-red 2s infinite;
+        }
+
+        .lock-unlocked {
+            background: linear-gradient(45deg, #00ff88, #00ffff);
+            border-color: #00ff88;
+            color: #000;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 20px #ff0040; }
+            50% { box-shadow: 0 0 40px #ff0040; }
+            100% { box-shadow: 0 0 20px #ff0040; }
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 20px #00ff88; }
+            50% { box-shadow: 0 0 40px #00ff88; }
+            100% { box-shadow: 0 0 20px #00ff88; }
+        }
+
+        .biometric-scanner {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            border: 2px solid #00ffff;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: scan-pulse 3s infinite;
+        }
+
+        @keyframes scan-pulse {
+            0% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
+            50% { border-color: #ff00ff; box-shadow: 0 0 40px #ff00ff; }
+            100% { border-color: #00ffff; box-shadow: 0 0 20px #00ffff; }
+        }
+
+        .status-display {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .status-text {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+            margin-bottom: 10px;
+        }
+
+        .threat-level {
+            font-size: 16px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 1px solid;
+        }
+
+        .threat-secure {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .threat-alert {
+            background: rgba(255, 0, 64, 0.2);
+            border-color: #ff0040;
+            color: #ff0040;
+        }
+
+        .control-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00ffff;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px 8px;
+            background: transparent;
+            border: none;
+            color: #00ffff;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            min-width: 80px;
+        }
+
+        .tab-button.active {
+            background: rgba(0, 255, 255, 0.1);
+            border-bottom-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quantum-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        .quantum-key {
+            width: 70px;
+            height: 70px;
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05));
+            color: #00ffff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .quantum-key:hover {
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.3), rgba(0, 255, 255, 0.1));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .quantum-display {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .scan-area {
+            width: 200px;
+            height: 150px;
+            border: 3px dashed #00ffff;
+            border-radius: 15px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.1), transparent);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .scan-area:hover {
+            border-style: solid;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .scan-area.scanning {
+            animation: scanning 2s infinite;
+        }
+
+        @keyframes scanning {
+            0% { border-color: #00ffff; }
+            25% { border-color: #ff00ff; }
+            50% { border-color: #ffff00; }
+            75% { border-color: #ff00ff; }
+            100% { border-color: #00ffff; }
+        }
+
+        .quantum-button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .quantum-button:hover {
+            background: linear-gradient(45deg, #00ffff, #00ff88);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.4);
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .admin-button {
+            padding: 12px;
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 255, 0.1));
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            color: #ff00ff;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-button:hover {
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.4), rgba(255, 0, 255, 0.2));
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .stellar-map {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: orbit 10s infinite linear;
+        }
+
+        .planet.earth {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #0080ff, #00ff80);
+            top: 50%;
+            left: 30%;
+            animation-duration: 8s;
+        }
+
+        .planet.mars {
+            width: 15px;
+            height: 15px;
+            background: linear-gradient(45deg, #ff4000, #ff8000);
+            top: 30%;
+            right: 25%;
+            animation-duration: 12s;
+            animation-direction: reverse;
+        }
+
+        .planet.station {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #ffff00, #ff00ff);
+            top: 70%;
+            left: 60%;
+            animation-duration: 6s;
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(30px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(30px) rotate(-360deg); }
+        }
+
+        .cleanup-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .scan-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .scan-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            animation: scan-glow 2s infinite;
+        }
+
+        @keyframes scan-glow {
+            0% { box-shadow: 0 0 10px #00ffff; }
+            50% { box-shadow: 0 0 20px #ff00ff; }
+            100% { box-shadow: 0 0 10px #00ffff; }
+        }
+
+        .quarantine-panel {
+            background: rgba(255, 69, 0, 0.1);
+            border: 2px solid #ff4500;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .threat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #ff4500;
+        }
+
+        .threat-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .threat-name {
+            font-weight: bold;
+            color: #ff4500;
+        }
+
+        .threat-details {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .threat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quarantine-btn {
+            background: #ffa500;
+            color: #000;
+        }
+
+        .remove-btn {
+            background: #ff4500;
+            color: white;
+        }
+
+        .restore-btn {
+            background: #32cd32;
+            color: #000;
+        }
+
+        .system-log {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 20px 0;
+        }
+
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+
+        .log-success { color: #00ff88; }
+        .log-warning { color: #ffff00; }
+        .log-error { color: #ff0040; }
+        .log-info { color: #00ffff; }
+
+        .message {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            animation: messageSlide 0.5s ease;
+        }
+
+        @keyframes messageSlide {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .message.success {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .message.error {
+            background: rgba(255, 0, 64, 0.2);
+            border: 1px solid #ff0040;
+            color: #ff0040;
+        }
+
+        .message.warning {
+            background: rgba(255, 255, 0, 0.2);
+            border: 1px solid #ffff00;
+            color: #ffff00;
+        }
+
+        /* Vault specific styles */
+        .vault-containers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .vault-container-item {
+            background: linear-gradient(135deg, rgba(0, 50, 50, 0.8), rgba(0, 0, 0, 0.9));
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .vault-container-item:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+           
+            .quantum-door {
+                width: 250px;
+                height: 320px;
+            }
+
+            .control-tabs {
+                font-size: 10px;
+            }
+
+            .tab-button {
+                padding: 8px 4px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated starfield background -->
+    <div class="starfield" id="starfield"></div>
+
+    <div class="main-container">
+        <!-- Door Section -->
+        <div class="door-section">
+            <div class="quantum-door" id="quantumDoor">
+                <div class="quantum-lock lock-secured" id="quantumLock">🔒</div>
+                <div class="biometric-scanner">👁️</div>
+            </div>
+           
+            <div class="status-display">
+                <div class="status-text" id="statusText">QUANTUM LOCK SECURED</div>
+                <div class="threat-level threat-secure" id="threatLevel">THREAT LEVEL: SECURE</div>
+            </div>
+        </div>
+
+        <!-- Control Panel Section -->
+        <div class="control-panel">
+            <h1 style="text-align: center; margin-bottom: 30px; font-size: 24px; text-shadow: 0 0 10px #00ffff;">
+                🛸 ULTIMATE QUANTUM SECURITY SYSTEM 🛸
+            </h1>
+
+            <!-- Control Tabs -->
+            <div class="control-tabs">
+                <button class="tab-button active" onclick="switchTab('quantum')">Quantum</button>
+                <button class="tab-button" onclick="switchTab('biometric')">Biometric</button>
+                <button class="tab-button" onclick="switchTab('stellar')">Stellar</button>
+                <button class="tab-button" onclick="switchTab('security')">Security</button>
+                <button class="tab-button" onclick="switchTab('vault')">Vault</button>
+                <button class="tab-button" onclick="switchTab('admin')">Command</button>
+            </div>
+
+            <!-- Quantum Access Panel -->
+            <div class="tab-panel active" id="quantumPanel">
+                <div class="quantum-display" id="quantumDisplay">ENTER QUANTUM ACCESS CODE</div>
+                <div class="quantum-keypad">
+                    <button class="quantum-key" onclick="addQuantumDigit('1')">1</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('2')">2</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('3')">3</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('4')">4</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('5')">5</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('6')">6</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('7')">7</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('8')">8</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('9')">9</button>
+                    <button class="quantum-key" onclick="clearQuantum()" style="background: linear-gradient(45deg, #ff0040, #ff4081);">CLR</button>
+                    <button class="quantum-key" onclick="addQuantumDigit('0')">0</button>
+                    <button class="quantum-key" onclick="verifyQuantumAccess()" style="background: linear-gradient(45deg, #00ff88, #00ffff);">⚡</button>
+                </div>
+            </div>
+
+            <!-- Biometric Panel -->
+            <div class="tab-panel" id="biometricPanel">
+                <div class="biometric-panel">
+                    <h3 style="text-align: center; margin-bottom: 20px;">🧬 ADVANCED BIOMETRIC AUTHENTICATION</h3>
+                   
+                    <div class="scan-area" id="fingerScan" onclick="startFingerScan()">
+                        👆
+                        <div style="position: absolute; bottom: 10px; font-size: 12px;">FINGERPRINT</div>
+                    </div>
+                   
+                    <div class="scan-area" id="retinaScan" onclick="startRetinaScan()">
+                        👁️
+                        <div style="position: absolute; bottom: 10px; font-size: 12px;">RETINA SCAN</div>
+                    </div>
+                   
+                    <button class="quantum-button" onclick="startVoiceAuth()">🎤 VOICE AUTHENTICATION</button>
+                </div>
+            </div>
+
+            <!-- Stellar Network Panel -->
+            <div class="tab-panel" id="stellarPanel">
+                <h3 style="text-align: center; margin-bottom: 20px;">🌌 GALACTIC SECURITY NETWORK</h3>
+               
+                <div class="stellar-map">
+                    <div class="planet earth" title="Earth Security Hub"></div>
+                    <div class="planet mars" title="Mars Outpost"></div>
+                    <div class="planet station" title="Deep Space Station"></div>
+                    <div style="position: absolute; top: 10px; left: 10px; font-size: 12px;">REAL-TIME PLANETARY STATUS</div>
+                </div>
+               
+                <button class="quantum-button" onclick="connectStellarNetwork()">🛰️ CONNECT TO GALACTIC NETWORK</button>
+                <button class="quantum-button" onclick="quantumEncryption()">🔐 ACTIVATE QUANTUM ENCRYPTION</button>
+                <button class="quantum-button" onclick="cosmicThreatScan()">🔍 COSMIC THREAT ANALYSIS</button>
+            </div>
+
+            <!-- Security Panel with Removal & Quarantine -->
+            <div class="tab-panel" id="securityPanel">
+                <h3 style="text-align: center; margin-bottom: 20px;">🛡️ ADVANCED THREAT MANAGEMENT</h3>
+               
+                <div class="cleanup-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="threatsDetected">0</div>
+                        <div class="stat-label">THREATS DETECTED</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="threatsQuarantined">0</div>
+                        <div class="stat-label">QUARANTINED</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="threatsRemoved">0</div>
+                        <div class="stat-label">REMOVED</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="systemHealth">100%</div>
+                        <div class="stat-label">SYSTEM HEALTH</div>
+                    </div>
+                </div>
+
+                <button class="quantum-button" onclick="initiateThreatScan()">🔍 INITIATE FULL SYSTEM SCAN</button>
+                <button class="quantum-button" onclick="quickCleanup()">⚡ QUICK CLEANUP PROTOCOL</button>
+                <button class="quantum-button" onclick="deepSystemPurge()">🧹 DEEP SYSTEM PURGE</button>
+
+                <div class="scan-progress" id="scanProgressContainer" style="display: none;">
+                    <div class="scan-bar" id="scanBar"></div>
+                </div>
+
+                <div class="quarantine-panel" id="quarantinePanel" style="display: none;">
+                    <h4 style="color: #ff4500; margin-bottom: 15px;">🔒 QUARANTINE VAULT</h4>
+                    <div id="quarantineList">
+                        <!-- Quarantined items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vault Panel -->
+            <div class="tab-panel" id="vaultPanel">
+                <h3 style="text-align: center; margin-bottom: 20px;">🏦 DIGITAL VAULT SYSTEM</h3>
+               
+                <div class="cleanup-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="vaultContainers">12</div>
+                        <div class="stat-label">SECURE CONTAINERS</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="vaultData">2.4TB</div>
+                        <div class="stat-label">PROTECTED DATA</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="vaultSecurity">MAX</div>
+                        <div class="stat-label">SECURITY LEVEL</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="vaultIntegrity">98.7%</div>
+                        <div class="stat-label">VAULT INTEGRITY</div>
+                    </div>
+                </div>
+
+                <button class="quantum-button" onclick="accessVaultSystem()" id="vaultAccessBtn">🔓 ACCESS VAULT SYSTEM</button>
+                <button class="quantum-button" onclick="synchronizeVaults()">🔄 SYNCHRONIZE VAULTS</button>
+                <button class="quantum-button" onclick="vaultBackup()">💾 BACKUP ALL VAULTS</button>
+
+                <div class="vault-containers" id="vaultContainersList" style="display: none;">
+                    <!-- Vault containers will be populated here -->
+                </div>
+            </div>
+
+            <!-- Admin Panel -->
+            <div class="tab-panel" id="adminPanel">
+                <h3 style="text-align: center; margin-bottom: 20px;">⚡ COMMAND CENTER</h3>
+               
+                <div class="admin-grid">
+                    <button class="admin-button" onclick="systemDiagnostics()">🔧 DIAGNOSTICS</button>
+                    <button class="admin-button" onclick="quantumReset()">🔄 QUANTUM RESET</button>
+                    <button class="admin-button" onclick="emergencyProtocol()">🚨 EMERGENCY MODE</button>
+                    <button class="admin-button" onclick="securitySweep()">🛡️ SECURITY SWEEP</button>
+                    <button class="admin-button" onclick="aiThreatAnalysis()">🤖 AI ANALYSIS</button>
+                    <button class="admin-button" onclick="cosmicShielding()">✨ COSMIC SHIELDING</button>
+                    <button class="admin-button" onclick="hyperspaceLock()">🌀 HYPERSPACE LOCK</button>
+                    <button class="admin-button" onclick="temporalSecurity()">⏰ TEMPORAL SECURITY</button>
+                </div>
+               
+                <div class="system-log" id="systemLog">
+                    <div class="log-entry log-info">[SYSTEM] Quantum Security System Online</div>
+                    <div class="log-entry log-success">[SECURITY] All defensive systems operational</div>
+                    <div class="log-entry log-info">[NETWORK] Galactic communication established</div>
+                </div>
+            </div>
+
+            <div id="messageDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        let quantumCode = '';
+        let isSecured = true;
+        let systemLogs = [];
+        let threatLevel = 'SECURE';
+        let quarantineVault = [];
+        let systemStats = {
+            threatsDetected: 0,
+            threatsQuarantined: 0,
+threatsRemoved: 0,
+            systemHealth: 100
+        };
+        let vaultUnlocked = false;
+        let vaultContainers = [
+            {id: 1, name: "Financial Records", security: "maximum", capacity: 85, data: "Banking & Investment Data"},
+            {id: 2, name: "Personal Documents", security: "high", capacity: 67, data: "ID & Legal Documents"},
+            {id: 3, name: "Digital Assets", security: "maximum", capacity: 92, data: "Cryptocurrency Wallets"},
+            {id: 4, name: "Business Files", security: "high", capacity: 74, data: "Corporate Documents"},
+            {id: 5, name: "Medical Records", security: "maximum", capacity: 43, data: "Health Information"},
+            {id: 6, name: "Research Data", security: "medium", capacity: 88, data: "Scientific Research"},
+            {id: 7, name: "Backup Systems", security: "high", capacity: 95, data: "System Backups"},
+            {id: 8, name: "Communication Logs", security: "medium", capacity: 56, data: "Message Archives"},
+            {id: 9, name: "Project Files", security: "high", capacity: 71, data: "Development Projects"},
+            {id: 10, name: "Security Protocols", security: "maximum", capacity: 39, data: "Access Control Data"},
+            {id: 11, name: "Digital Media", security: "medium", capacity: 83, data: "Multimedia Files"},
+            {id: 12, name: "Emergency Vault", security: "maximum", capacity: 15, data: "Critical Backups"}
+        ];
+
+        // Initialize starfield
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starfield.appendChild(star);
+            }
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Panel').classList.add('active');
+            
+            addLog(`[INTERFACE] Switched to ${tab.toUpperCase()} panel`, 'info');
+        }
+
+        // Quantum keypad functions
+        function addQuantumDigit(digit) {
+            if (quantumCode.length < 12) {
+                quantumCode += digit;
+                updateQuantumDisplay();
+            }
+        }
+
+        function clearQuantum() {
+            quantumCode = '';
+            updateQuantumDisplay();
+        }
+
+        function updateQuantumDisplay() {
+            const display = document.getElementById('quantumDisplay');
+            if (quantumCode.length === 0) {
+                display.textContent = 'ENTER QUANTUM ACCESS CODE';
+            } else {
+                display.textContent = '●'.repeat(quantumCode.length) + ' | QUANTUM ENCRYPTED';
+            }
+        }
+
+        function verifyQuantumAccess() {
+            const validCodes = ['2024', '12345', 'QUANTUM', 'COSMIC', '999999'];
+            
+            if (validCodes.includes(quantumCode.toUpperCase())) {
+                unlockSystem('Quantum Access Code');
+                addLog(`[ACCESS] Quantum verification successful - Code: ${quantumCode}`, 'success');
+            } else {
+                showMessage('⚠️ QUANTUM ACCESS DENIED - INVALID CODE', 'error');
+                addLog(`[SECURITY] Failed quantum access attempt - Code: ${quantumCode}`, 'error');
+                setTimeout(() => {
+                    clearQuantum();
+                    clearMessage();
+                }, 3000);
+            }
+        }
+
+        // Threat Management Functions
+        function initiateThreatScan() {
+            showMessage('🔍 Initiating comprehensive threat scan...', 'warning');
+            addLog('[SCAN] Full system threat scan initiated', 'info');
+            
+            const progressContainer = document.getElementById('scanProgressContainer');
+            const progressBar = document.getElementById('scanBar');
+            progressContainer.style.display = 'block';
+            
+            let progress = 0;
+            const scanInterval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(scanInterval);
+                    completeThreatScan();
+                }
+                progressBar.style.width = progress + '%';
+            }, 200);
+        }
+
+        function completeThreatScan() {
+            const threatsFound = Math.floor(Math.random() * 8) + 2;
+            systemStats.threatsDetected += threatsFound;
+            
+            const threatTypes = [
+                'Malicious Process',
+                'Corrupted Registry Entry',
+                'Suspicious Network Activity',
+                'Unauthorized Access Attempt',
+                'System Vulnerability',
+                'Memory Leak',
+                'Cache Corruption',
+                'Background Anomaly'
+            ];
+            
+            for (let i = 0; i < threatsFound; i++) {
+                const threat = {
+                    id: Date.now() + i,
+                    name: threatTypes[Math.floor(Math.random() * threatTypes.length)],
+                    severity: ['LOW', 'MEDIUM', 'HIGH'][Math.floor(Math.random() * 3)],
+                    location: `/system/sector${Math.floor(Math.random() * 9) + 1}`,
+                    detected: new Date().toLocaleTimeString(),
+                    status: 'detected'
+                };
+                quarantineVault.push(threat);
+            }
+            
+            updateSecurityStats();
+            displayQuarantineVault();
+            
+            setTimeout(() => {
+                document.getElementById('scanProgressContainer').style.display = 'none';
+                showMessage(`✅ Scan complete - ${threatsFound} threats detected and ready for quarantine`, 'success');
+                addLog(`[SCAN] Threat scan complete - ${threatsFound} threats identified`, 'success');
+            }, 1000);
+        }
+
+        function quickCleanup() {
+            showMessage('⚡ Executing quick cleanup protocol...', 'warning');
+            addLog('[CLEANUP] Quick cleanup initiated', 'info');
+            
+            setTimeout(() => {
+                const cleanedItems = Math.floor(Math.random() * 15) + 5;
+                systemStats.systemHealth = Math.min(100, systemStats.systemHealth + 5);
+                
+                showMessage(`✅ Quick cleanup complete - ${cleanedItems} temporary files removed`, 'success');
+                addLog(`[CLEANUP] Quick cleanup complete - ${cleanedItems} items cleaned`, 'success');
+                updateSecurityStats();
+            }, 2000);
+        }
+
+        function deepSystemPurge() {
+            showMessage('🧹 Initiating deep system purge - This may take a moment...', 'warning');
+            addLog('[PURGE] Deep system purge initiated', 'info');
+            
+            const progressContainer = document.getElementById('scanProgressContainer');
+            const progressBar = document.getElementById('scanBar');
+            progressContainer.style.display = 'block';
+            
+            let progress = 0;
+            const purgeInterval = setInterval(() => {
+                progress += Math.random() * 8 + 3;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(purgeInterval);
+                    
+                    const removedCount = quarantineVault.length;
+                    systemStats.threatsRemoved += removedCount;
+                    quarantineVault = [];
+                    systemStats.systemHealth = 100;
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        showMessage(`✅ Deep purge complete - System optimized, ${removedCount} threats permanently removed`, 'success');
+                        addLog(`[PURGE] Deep system purge complete - ${removedCount} threats eliminated`, 'success');
+                        updateSecurityStats();
+                        displayQuarantineVault();
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 150);
+        }
+
+        function quarantineThreat(threatId) {
+            const threat = quarantineVault.find(t => t.id === threatId);
+            if (threat && threat.status === 'detected') {
+                threat.status = 'quarantined';
+                systemStats.threatsQuarantined++;
+                systemStats.systemHealth = Math.min(100, systemStats.systemHealth + 2);
+                
+                showMessage(`🔒 Threat quarantined: ${threat.name}`, 'warning');
+                addLog(`[QUARANTINE] Threat isolated: ${threat.name} at ${threat.location}`, 'warning');
+                updateSecurityStats();
+                displayQuarantineVault();
+            }
+        }
+
+        function removeThreat(threatId) {
+            const threatIndex = quarantineVault.findIndex(t => t.id === threatId);
+            if (threatIndex !== -1) {
+                const threat = quarantineVault[threatIndex];
+                quarantineVault.splice(threatIndex, 1);
+                systemStats.threatsRemoved++;
+                systemStats.systemHealth = Math.min(100, systemStats.systemHealth + 3);
+                
+                showMessage(`🗑️ Threat permanently removed: ${threat.name}`, 'success');
+                addLog(`[REMOVAL] Threat eliminated: ${threat.name}`, 'success');
+                updateSecurityStats();
+                displayQuarantineVault();
+            }
+        }
+
+        function restoreThreat(threatId) {
+            const threat = quarantineVault.find(t => t.id === threatId);
+            if (threat) {
+                threat.status = 'restored';
+                showMessage(`⚠️ Threat restored: ${threat.name} - Monitor closely`, 'warning');
+                addLog(`[RESTORE] Threat restored: ${threat.name} - System monitoring active`, 'warning');
+                displayQuarantineVault();
+            }
+        }
+
+        function updateSecurityStats() {
+            document.getElementById('threatsDetected').textContent = systemStats.threatsDetected;
+            document.getElementById('threatsQuarantined').textContent = systemStats.threatsQuarantined;
+            document.getElementById('threatsRemoved').textContent = systemStats.threatsRemoved;
+            document.getElementById('systemHealth').textContent = systemStats.systemHealth + '%';
+        }
+
+        function displayQuarantineVault() {
+            const quarantineList = document.getElementById('quarantineList');
+            const quarantinePanel = document.getElementById('quarantinePanel');
+            
+            if (quarantineVault.length === 0) {
+                quarantinePanel.style.display = 'none';
+                return;
+            }
+            
+            quarantinePanel.style.display = 'block';
+            quarantineList.innerHTML = '';
+            
+            quarantineVault.forEach(threat => {
+                const threatItem = document.createElement('div');
+                threatItem.className = 'threat-item';
+                
+                let statusColor = '#ff4500';
+                if (threat.status === 'quarantined') statusColor = '#ffa500';
+                if (threat.status === 'restored') statusColor = '#32cd32';
+                
+                threatItem.innerHTML = `
+                    <div class="threat-info">
+                        <div class="threat-name" style="color: ${statusColor};">
+                            ${threat.name} [${threat.severity}]
+                        </div>
+                        <div class="threat-details">
+                            Location: ${threat.location} | Status: ${threat.status.toUpperCase()} | ${threat.detected}
+                        </div>
+                    </div>
+                    <div class="threat-actions">
+                        ${threat.status === 'detected' ? `
+                            <button class="action-btn quarantine-btn" onclick="quarantineThreat(${threat.id})">
+                                🔒 QUARANTINE
+                            </button>
+                        ` : ''}
+                        ${threat.status === 'quarantined' ? `
+                            <button class="action-btn restore-btn" onclick="restoreThreat(${threat.id})">
+                                ↩️ RESTORE
+                            </button>
+                        ` : ''}
+                        <button class="action-btn remove-btn" onclick="removeThreat(${threat.id})">
+                            🗑️ REMOVE
+                        </button>
+                    </div>
+                `;
+                
+                quarantineList.appendChild(threatItem);
+            });
+        }
+
+        // Vault Functions
+        function accessVaultSystem() {
+            if (!isSecured) {
+                vaultUnlocked = true;
+                document.getElementById('vaultContainersList').style.display = 'grid';
+                document.getElementById('vaultAccessBtn').textContent = '🔓 VAULT SYSTEM ACTIVE';
+                renderVaultContainers();
+                showMessage('🏦 Vault system accessed - All containers available', 'success');
+                addLog('[VAULT] Digital vault system accessed', 'success');
+            } else {
+                showMessage('⚠️ Unlock quantum system first to access vaults', 'error');
+                addLog('[VAULT] Vault access denied - Quantum system locked', 'error');
+            }
+        }
+
+        function renderVaultContainers() {
+            const containersList = document.getElementById('vaultContainersList');
+            containersList.innerHTML = '';
+            
+            vaultContainers.forEach(container => {
+                const div = document.createElement('div');
+                div.className = 'vault-container-item';
+                
+                let securityBadge = container.security === 'maximum' ? '🔴 MAX' : 
+                                   container.security === 'high' ? '🟠 HIGH' : '🟡 MED';
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <strong style="color: #00ffff;">${container.name}</strong>
+                        <span style="font-size: 12px;">${securityBadge}</span>
+                    </div>
+                    <div style="font-size: 12px; color: #ccc; margin-bottom: 10px;">
+                        ${container.data}
+                    </div>
+                    <div style="margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                            <span>Capacity:</span>
+                            <span style="color: #00ff88;">${container.capacity}%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden;">
+                            <div style="width: ${container.capacity}%; height: 100%; background: linear-gradient(90deg, #00ff88, #00ffff); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button onclick="accessContainer(${container.id})" style="flex: 1; padding: 8px; background: linear-gradient(45deg, #00ff88, #00ffff); border: none; border-radius: 5px; color: #000; font-size: 11px; cursor: pointer; font-weight: bold;">
+                            ACCESS
+                        </button>
+                        <button onclick="secureContainer(${container.id})" style="flex: 1; padding: 8px; background: linear-gradient(45deg, #ff6600, #ff9900); border: none; border-radius: 5px; color: #000; font-size: 11px; cursor: pointer; font-weight: bold;">
+                            SECURE
+                        </button>
+                    </div>
+                `;
+                
+                containersList.appendChild(div);
+            });
+        }
+
+        function accessContainer(id) {
+            const container = vaultContainers.find(c => c.id === id);
+            showMessage(`🔓 Accessing: ${container.name}`, 'success');
+            addLog(`[VAULT] Container accessed: ${container.name}`, 'info');
+        }
+
+        function secureContainer(id) {
+            const container = vaultContainers.find(c => c.id === id);
+            showMessage(`🔒 Enhanced security applied to: ${container.name}`, 'success');
+            addLog(`[VAULT] Container secured: ${container.name}`, 'success');
+        }
+
+        function synchronizeVaults() {
+            showMessage('🔄 Synchronizing all vault containers...', 'warning');
+            addLog('[VAULT] Vault synchronization initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ All vaults synchronized successfully', 'success');
+                addLog('[VAULT] Synchronization complete - All vaults up to date', 'success');
+            }, 2500);
+        }
+
+        function vaultBackup() {
+            showMessage('💾 Creating encrypted backup of all vaults...', 'warning');
+            addLog('[VAULT] Backup process initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ Backup complete - 2.4TB encrypted and stored', 'success');
+                addLog('[VAULT] Backup complete - All data secured', 'success');
+            }, 3000);
+        }
+
+        // Biometric functions
+        function startFingerScan() {
+            const scanArea = document.getElementById('fingerScan');
+            scanArea.classList.add('scanning');
+            scanArea.textContent = 'SCANNING...';
+            
+            addLog('[BIOMETRIC] Fingerprint scan initiated', 'info');
+            
+            setTimeout(() => {
+                scanArea.classList.remove('scanning');
+                scanArea.innerHTML = '✅<div style="position: absolute; bottom: 10px; font-size: 12px;">AUTHORIZED</div>';
+                unlockSystem('Biometric Fingerprint');
+                addLog('[BIOMETRIC] Fingerprint match confirmed', 'success');
+            }, 3000);
+        }
+
+        function startRetinaScan() {
+            const scanArea = document.getElementById('retinaScan');
+            scanArea.classList.add('scanning');
+            scanArea.textContent = 'ANALYZING...';
+            
+            addLog('[BIOMETRIC] Retina scan initiated', 'info');
+            
+            setTimeout(() => {
+                scanArea.classList.remove('scanning');
+                scanArea.innerHTML = '✅<div style="position: absolute; bottom: 10px; font-size: 12px;">VERIFIED</div>';
+                unlockSystem('Retina Scan Authentication');
+                addLog('[BIOMETRIC] Retina pattern verified', 'success');
+            }, 2500);
+        }
+
+        function startVoiceAuth() {
+            showMessage('🎤 Voice authentication activated - Say "Open Quantum Door"', 'warning');
+            addLog('[BIOMETRIC] Voice authentication active', 'info');
+            
+            setTimeout(() => {
+                unlockSystem('Voice Authentication');
+                addLog('[BIOMETRIC] Voice pattern recognized', 'success');
+            }, 4000);
+        }
+
+        // Stellar network functions
+        function connectStellarNetwork() {
+            showMessage('🛰️ Connecting to Galactic Security Network...', 'warning');
+            addLog('[NETWORK] Establishing galactic connection', 'info');
+            
+            setTimeout(() => {
+                showMessage('✨ Connected to 847 Galactic Security Nodes', 'success');
+                addLog('[NETWORK] Galactic network connection established - 847 nodes online', 'success');
+            }, 2000);
+        }
+
+        function quantumEncryption() {
+            showMessage('🔐 Quantum encryption protocols activated', 'success');
+            addLog('[SECURITY] Quantum encryption enabled - 2048-bit quantum key', 'success');
+        }
+
+        function cosmicThreatScan() {
+            showMessage('🔍 Scanning for cosmic threats across 12 star systems...', 'warning');
+            addLog('[ANALYSIS] Cosmic threat scan initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ No cosmic threats detected - All systems secure', 'success');
+                addLog('[ANALYSIS] Cosmic scan complete - No threats detected', 'success');
+            }, 3000);
+        }
+
+        // Admin functions
+        function systemDiagnostics() {
+            showMessage('🔧 Running comprehensive system diagnostics...', 'warning');
+            addLog('[DIAGNOSTICS] System health check initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ All systems optimal - Quantum efficiency at 98.7%', 'success');
+                addLog('[DIAGNOSTICS] All systems operational - Efficiency: 98.7%', 'success');
+            }, 2000);
+        }
+
+        function quantumReset() {
+            showMessage('🔄 Initiating quantum system reset...', 'warning');
+            addLog('[SYSTEM] Quantum reset initiated', 'info');
+            
+            setTimeout(() => {
+                isSecured = true;
+                quantumCode = '';
+                quarantineVault = [];
+                vaultUnlocked = false;
+                systemStats = {
+                    threatsDetected: 0,
+                    threatsQuarantined: 0,
+                    threatsRemoved: 0,
+                    systemHealth: 100
+                };
+                updateQuantumDisplay();
+                updateSecurityStatus();
+                updateSecurityStats();
+                displayQuarantineVault();
+                document.getElementById('vaultContainersList').style.display = 'none';
+                document.getElementById('vaultAccessBtn').textContent = '🔓 ACCESS VAULT SYSTEM';
+                showMessage('✨ Quantum system reset complete', 'success');
+                addLog('[SYSTEM] Quantum reset successful - All systems restored', 'success');
+            }, 1500);
+        }
+
+        function emergencyProtocol() {
+            threatLevel = 'EMERGENCY';
+            updateThreatLevel();
+            showMessage('🚨 EMERGENCY PROTOCOLS ACTIVATED - ALL SYSTEMS LOCKED', 'error');
+            addLog('[EMERGENCY] Emergency lockdown activated', 'error');
+        }
+
+        function securitySweep() {
+            showMessage('🛡️ Performing quantum security sweep...', 'warning');
+            addLog('[SECURITY] Security sweep initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ Security sweep complete - No intrusions detected', 'success');
+                addLog('[SECURITY] Security sweep complete - Perimeter secure', 'success');
+            }, 2500);
+        }
+
+        function aiThreatAnalysis() {
+            showMessage('🤖 AI analyzing potential threats...', 'warning');
+            addLog('[AI] Threat analysis algorithm initiated', 'info');
+            
+            setTimeout(() => {
+                showMessage('✅ AI Analysis: Threat probability 0.03% - Environment secure', 'success');
+                addLog('[AI] Threat analysis complete - Low risk environment', 'success');
+            }, 3000);
+        }
+
+        function cosmicShielding() {
+            showMessage('✨ Activating cosmic radiation shielding...', 'warning');
+            addLog('[SHIELDING] Cosmic shielding activated', 'info');
+            
+            setTimeout(() => {
+                showMessage('🛡️ Cosmic shielding at maximum strength', 'success');
+                addLog('[SHIELDING] Cosmic barriers at 100% efficiency', 'success');
+            }, 1800);
+        }
+
+        function hyperspaceLock() {
+            showMessage('🌀 Engaging hyperspace dimensional lock...', 'warning');
+            addLog('[HYPERSPACE] Dimensional lock engaged', 'info');
+            
+            setTimeout(() => {
+                showMessage('✨ Hyperspace secured - Dimensional stability confirmed', 'success');
+                addLog('[HYPERSPACE] Dimensional lock stable - Reality anchored', 'success');
+            }, 2200);
+        }
+
+        function temporalSecurity() {
+            showMessage('⏰ Activating temporal security barriers...', 'warning');
+            addLog('[TEMPORAL] Temporal security protocols engaged', 'info');
+            
+            setTimeout(() => {
+                showMessage('✨ Temporal field stabilized - Timeline secured', 'success');
+                addLog('[TEMPORAL] Temporal barriers active - Timeline protected', 'success');
+            }, 2000);
+        }
+
+        // Core system functions
+        function unlockSystem(method) {
+            isSecured = false;
+            threatLevel = 'SECURE';
+            
+            const door = document.getElementById('quantumDoor');
+            const lock = document.getElementById('quantumLock');
+            
+            door.classList.add('unlocked');
+            lock.classList.remove('lock-secured');
+            lock.classList.add('lock-unlocked');
+            lock.textContent = '🔓';
+            
+            updateSecurityStatus();
+            updateThreatLevel();
+            showMessage(`✅ QUANTUM ACCESS GRANTED - ${method.toUpperCase()}`, 'success');
+            addLog(`[ACCESS] System unlocked via ${method}`, 'success');
+            
+            // Auto-lock after 20 seconds
+            setTimeout(() => {
+                lockSystem();
+            }, 20000);
+        }
+
+        function lockSystem() {
+            isSecured = true;
+            quantumCode = '';
+            vaultUnlocked = false;
+            
+            const door = document.getElementById('quantumDoor');
+            const lock = document.getElementById('quantumLock');
+            
+            door.classList.remove('unlocked');
+            lock.classList.remove('lock-unlocked');
+            lock.classList.add('lock-secured');
+            lock.textContent = '🔒';
+            
+            updateSecurityStatus();
+            updateQuantumDisplay();
+            clearMessage();
+            document.getElementById('vaultContainersList').style.display = 'none';
+            document.getElementById('vaultAccessBtn').textContent = '🔓 ACCESS VAULT SYSTEM';
+            addLog('[SECURITY] System auto-locked', 'info');
+        }
+
+        function updateSecurityStatus() {
+            const statusText = document.getElementById('statusText');
+            if (isSecured) {
+                statusText.textContent = 'QUANTUM LOCK SECURED';
+                statusText.style.color = '#ff0040';
+            } else {
+                statusText.textContent = 'QUANTUM ACCESS GRANTED';
+                statusText.style.color = '#00ff88';
+            }
+        }
+
+        function updateThreatLevel() {
+            const threatDisplay = document.getElementById('threatLevel');
+            threatDisplay.className = 'threat-level';
+            
+            switch (threatLevel) {
+                case 'SECURE':
+                    threatDisplay.classList.add('threat-secure');
+                    threatDisplay.textContent = 'THREAT LEVEL: SECURE';
+                    break;
+                case 'EMERGENCY':
+                    threatDisplay.classList.add('threat-alert');
+                    threatDisplay.textContent = 'THREAT LEVEL: EMERGENCY';
+                    break;
+            }
+        }
+
+        function addLog(message, type) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            systemLogs.unshift(logEntry);
+            
+            if (systemLogs.length > 50) {
+                systemLogs = systemLogs.slice(0, 50);
+            }
+            
+            updateLogDisplay(logEntry, type);
+        }
+
+        function updateLogDisplay(entry, type) {
+            const logDisplay = document.getElementById('systemLog');
+            const logElement = document.createElement('div');
+            logElement.className = `log-entry log-${type}`;
+            logElement.textContent = entry;
+            
+            logDisplay.insertBefore(logElement, logDisplay.firstChild);
+            
+            const entries = logDisplay.querySelectorAll('.log-entry');
+            if (entries.length > 10) {
+                logDisplay.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageDisplay = document.getElementById('messageDisplay');
+            messageDisplay.innerHTML = `<div class="message ${type}">${text}</div>`;
+        }
+
+        function clearMessage() {
+            const messageDisplay = document.getElementById('messageDisplay');
+            messageDisplay.innerHTML = '';
+        }
+
+        // Automatic threat generation
+        function simulateRandomThreats() {
+            if (Math.random() < 0.15) {
+                const threatTypes = [
+                    'Suspicious Network Packet',
+                    'Memory Access Violation',
+                    'Unauthorized Process',
+                    'Registry Anomaly',
+                    'File Integrity Issue'
+                ];
+                
+                const threat = {
+                    id: Date.now(),
+                    name: threatTypes[Math.floor(Math.random() * threatTypes.length)],
+                    severity: ['LOW', 'MEDIUM'][Math.floor(Math.random() * 2)],
+                    location: `/system/auto${Math.floor(Math.random() * 99)}`,
+                    detected: new Date().toLocaleTimeString(),
+                    status: 'detected'
+                };
+                
+                quarantineVault.push(threat);
+                systemStats.threatsDetected++;
+                systemStats.systemHealth = Math.max(75, systemStats.systemHealth - 2);
+                
+                updateSecurityStats();
+                displayQuarantineVault();
+                addLog(`[AUTO-DETECT] New threat identified: ${threat.name}`, 'warning');
+            }
+        }
+
+        // Initialize system
+        function initializeSystem() {
+            createStarfield();
+            updateSecurityStats();
+            
+            // Start threat simulation
+            setInterval(simulateRandomThreats, 10000);
+            
+            // Welcome message
+            setTimeout(() => {
+                showMessage('🛸 Ultimate Quantum Security System Online - All Systems Active', 'success');
+                addLog('[SYSTEM] Ultimate Quantum Security System initialized', 'success');
+                addLog('[SECURITY] Advanced threat management protocols active', 'success');
+                addLog('[VAULT] Digital vault system ready', 'success');
+                addLog('[SYSTEM] All defensive systems online', 'success');
+            }, 1000);
+            
+            console.log(`
+    ╔══════════════════════════════════════════════════════════════╗
+    ║     🛸 ULTIMATE QUANTUM SECURITY SYSTEM - COMPLETE 🛸       ║
+    ╠══════════════════════════════════════════════════════════════╣
+    ║  INTEGRATED FEATURES:                                        ║
+    ║  • Quantum Door Lock System                                 ║
+    ║  • Advanced Biometric Authentication                        ║
+    ║  • Galactic Stellar Network                                 ║
+    ║  • Threat Detection & Quarantine                           ║
+    ║  • Digital Vault System (12 containers)                    ║
+    ║  • Command Center Controls                                  ║
+    ║                                                            ║
+    ║  Access Codes: 2024, 12345, QUANTUM, COSMIC, 999999       ║
+    ╚══════════════════════════════════════════════════════════════╝
+            `);
+        }
+
+        // Start the system when page loads
+        window.addEventListener('load', initializeSystem);
+    </script>
+</body>
+</html>
